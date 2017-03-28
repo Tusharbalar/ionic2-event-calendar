@@ -5,6 +5,10 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { SurveyService } from '../service/survey.service';
+import { CustomHttpService } from '../service/custom.header.service';
+import { NgCalendarModule  } from 'ionic2-calendar';
+import { RequestOptions, HttpModule, XHRBackend } from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -15,6 +19,7 @@ import { TabsPage } from '../pages/tabs/tabs';
     TabsPage
   ],
   imports: [
+    NgCalendarModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -26,7 +31,15 @@ import { TabsPage } from '../pages/tabs/tabs';
     TabsPage
   ],
   providers: [
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    SurveyService, CustomHttpService,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {
+    provide: CustomHttpService,
+    useFactory: (backend: XHRBackend, defaultOptions: RequestOptions) => {
+      return new CustomHttpService(backend, defaultOptions);
+    },
+    deps: [XHRBackend, RequestOptions]
+  }
   ]
 })
 export class AppModule {}

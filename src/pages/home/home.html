@@ -1,17 +1,43 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
+<ion-header class="complaints">
+  <ion-navbar color="primary">
+  <ion-toolbar>
+    <ion-title >
+      <span>{{viewTitle | uppercase}}</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-navbar>
 </ion-header>
+<ion-content>
+  <ion-spinner class="csCenter" *ngIf="eventSource.length==0" style="margin-top: 50vh;position:absolute;margin-left:50vw"></ion-spinner>
+  <template #template let-showEventDetail="showEventDetail" let-selectedDate="selectedDate" let-noEventsLabel="noEventsLabel">
+    <section>
+      <div class="timeline-row" padding>
+        <div *ngIf="!hasEvents && eventSource.length!=0">
+          <b>No Events</b>
+        </div>
+        <div class="cd-timeline-content dark" *ngFor="let a of selectedDate.events; let i = index" (click)="openViewEventModal(a.id, i)">
 
-<ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+          <div class="color-col" [style.border-left-color]="a.color">
+            <h5 class="timeline-title">{{ a.title }}</h5>
+            <span class="startTime"> {{a.time1 }}   </span>
+            <span class="startTime"> - {{ a.time2 }}</span>
+            <span class="startTime3" *ngIf="a.durationDays != 0">[{{ a.durationDays + 1 }} days event]</span>
+            <span class="Timelinelocation">{{ a.location }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+  <calendar class="csEvent" [eventSource]="eventSource"
+        [calendarMode]="calendar.mode"
+        [currentDate]="calendar.currentDate"
+        (onCurrentDateChanged)="onCurrentDateChanged($event)"
+        (onRangeChanged)="onRangeChanged($event)"
+        (onEventSelected)="onEventSelected($event)"
+        (onTitleChanged)="onViewTitleChanged($event)"
+        queryMode="remote"
+        (onTimeSelected)="onTimeSelected($event)"
+        [monthviewEventDetailTemplate]="template"
+        step="30">
+  </calendar>
 </ion-content>
