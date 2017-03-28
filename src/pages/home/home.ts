@@ -14,6 +14,7 @@ export class HomePage {
   public currentDate;
   public canCreateNewEvent;
   public isToday: boolean;
+  public hasEvents;
   public calendar = {
     mode: 'month',
     currentDate: new Date()
@@ -42,6 +43,7 @@ export class HomePage {
   onTimeSelected(ev) {
     console.log('Selected time: ' + ev.selectedTime + ', hasEvents: ' +
       (ev.events !== undefined && ev.events.length !== 0) + ', disabled: ' + ev.disabled);
+    this.hasEvents = ev.events !== undefined && ev.events.length !== 0;
   }
 
   onCurrentDateChanged(event: Date) {
